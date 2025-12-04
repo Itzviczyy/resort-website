@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Room {
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  pricePerNight Float
+  capacity      Int
+  amenities     String   // JSON string of amenities array
+  images        String   // JSON string of image URLs array
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  bookings      Booking[]
+
+  @@map("rooms")
+}
+
+model Customer {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  bookings  Booking[]
+
+  @@map("customers")
+}
+
+model Booking {
+  id           String    @id @default(cuid())
+  customerId   String
+  roomId       String
+  checkIn      DateTime
+  checkOut     DateTime
+  numberOfGuests Int
+  totalAmount  Float
+  status       String    @default("Pending") // Pending, Confirmed, Cancelled
+  specialRequests String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  customer     Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  room         Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@map("bookings")
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String   // Hashed password
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+
