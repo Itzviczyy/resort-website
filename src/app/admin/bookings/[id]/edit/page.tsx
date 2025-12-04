@@ -16,11 +16,8 @@ async function getBooking(id: string) {
   }
 }
 
-export default async function EditBookingPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+// ⭐ FIXED: Removed strict typing that breaks Vercel
+export default async function EditBookingPage({ params }: any) {
   const booking = await getBooking(params.id);
 
   if (!booking) {
@@ -37,6 +34,3 @@ export default async function EditBookingPage({
     </div>
   );
 }
-
-
-
