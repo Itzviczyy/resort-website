@@ -28,7 +28,7 @@ async function getBooking(id: string) {
   }
 }
 
-export default async function BookingConfirmationPage({ params }: PageProps) {
+export default async function BookingConfirmationPage({ params }: any) {
   const booking = await getBooking(params.id);
 
   if (!booking) {

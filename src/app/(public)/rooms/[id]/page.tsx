@@ -25,11 +25,7 @@ async function getRoom(id: string) {
   }
 }
 
-export default async function RoomDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function RoomDetailPage({ params }: any) {
   const room = await getRoom(params.id);
 
   if (!room) {
