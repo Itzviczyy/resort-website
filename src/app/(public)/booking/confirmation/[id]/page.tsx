@@ -1,28 +1,30 @@
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { CheckCircle, Calendar, Users, Home, ArrowRight } from 'lucide-react';
-import { prisma } from '@/lib/prisma';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { formatCurrency, formatDate } from '@/lib/utils';
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { CheckCircle, Calendar, Users, Home, ArrowRight } from "lucide-react";
+import { prisma } from "@/lib/prisma";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { formatCurrency, formatDate } from "@/lib/utils";
 
 async function getBooking(id: string) {
   try {
-    return await prisma.booking.findUnique({
+    const booking = await prisma.booking.findUnique({
       where: { id },
       include: {
         room: true,
         customer: true,
       },
     });
+    return booking;
   } catch {
     return null;
   }
 }
 
-export default async function BookingConfirmationPage(props: any) {
-  const booking = await getBooking(props.params.id);
+// ⭐ IMPORTANT: NO TYPE HERE — this fixes the Vercel error
+export default async function BookingConfirmationPage({ params }: any) {
+  const booking = await getBooking(params.id);
 
   if (!booking) {
     notFound();
@@ -48,10 +50,12 @@ export default async function BookingConfirmationPage(props: any) {
               <span className="text-muted-foreground">Booking ID:</span>
               <span className="font-mono font-semibold">{booking.id}</span>
             </div>
+
             <div className="flex justify-between">
               <span className="text-muted-foreground">Room:</span>
               <span className="font-semibold">{booking.room.name}</span>
             </div>
+
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-muted-foreground">
                 <Calendar className="h-4 w-4" />
@@ -59,6 +63,7 @@ export default async function BookingConfirmationPage(props: any) {
               </span>
               <span className="font-semibold">{formatDate(booking.checkIn)}</span>
             </div>
+
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-muted-foreground">
                 <Calendar className="h-4 w-4" />
@@ -66,6 +71,7 @@ export default async function BookingConfirmationPage(props: any) {
               </span>
               <span className="font-semibold">{formatDate(booking.checkOut)}</span>
             </div>
+
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-muted-foreground">
                 <Users className="h-4 w-4" />
@@ -73,20 +79,22 @@ export default async function BookingConfirmationPage(props: any) {
               </span>
               <span className="font-semibold">{booking.numberOfGuests}</span>
             </div>
+
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Status:</span>
               <Badge
                 variant={
-                  booking.status === 'Confirmed'
-                    ? 'default'
-                    : booking.status === 'Cancelled'
-                    ? 'destructive'
-                    : 'secondary'
+                  booking.status === "Confirmed"
+                    ? "default"
+                    : booking.status === "Cancelled"
+                    ? "destructive"
+                    : "secondary"
                 }
               >
                 {booking.status}
               </Badge>
             </div>
+
             <div className="border-t pt-4">
               <div className="flex justify-between text-lg">
                 <span className="font-semibold">Total Amount:</span>
@@ -107,10 +115,12 @@ export default async function BookingConfirmationPage(props: any) {
               <span className="text-muted-foreground">Name:</span>
               <span className="font-semibold">{booking.customer.name}</span>
             </div>
+
             <div className="flex justify-between">
               <span className="text-muted-foreground">Email:</span>
               <span className="font-semibold">{booking.customer.email}</span>
             </div>
+
             <div className="flex justify-between">
               <span className="text-muted-foreground">Phone:</span>
               <span className="font-semibold">{booking.customer.phone}</span>
@@ -124,7 +134,9 @@ export default async function BookingConfirmationPage(props: any) {
               <CardTitle>Special Requests</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">{booking.specialRequests}</p>
+              <p className="text-muted-foreground">
+                {booking.specialRequests}
+              </p>
             </CardContent>
           </Card>
         )}
@@ -136,6 +148,7 @@ export default async function BookingConfirmationPage(props: any) {
               Back to Home
             </Link>
           </Button>
+
           <Button variant="outline" asChild className="flex-1">
             <Link href="/rooms">
               View More Rooms
