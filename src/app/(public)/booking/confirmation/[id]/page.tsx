@@ -22,7 +22,7 @@ async function getBooking(id: string) {
   }
 }
 
-// ⭐ IMPORTANT: NO TYPE HERE — this fixes the Vercel error
+// ⭐ FIX: Removed all type constraints
 export default async function BookingConfirmationPage({ params }: any) {
   const booking = await getBooking(params.id);
 
@@ -45,6 +45,7 @@ export default async function BookingConfirmationPage({ params }: any) {
           <CardHeader>
             <CardTitle>Booking Details</CardTitle>
           </CardHeader>
+
           <CardContent className="space-y-4">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Booking ID:</span>
@@ -110,6 +111,7 @@ export default async function BookingConfirmationPage({ params }: any) {
           <CardHeader>
             <CardTitle>Guest Information</CardTitle>
           </CardHeader>
+
           <CardContent className="space-y-2">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Name:</span>
