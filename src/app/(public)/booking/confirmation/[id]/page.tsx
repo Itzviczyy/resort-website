@@ -7,29 +7,22 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency, formatDate } from '@/lib/utils';
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
-
 async function getBooking(id: string) {
   try {
-    const booking = await prisma.booking.findUnique({
+    return await prisma.booking.findUnique({
       where: { id },
       include: {
         room: true,
         customer: true,
       },
     });
-    return booking;
   } catch {
     return null;
   }
 }
 
-export default async function BookingConfirmationPage({ params }: any) {
-  const booking = await getBooking(params.id);
+export default async function BookingConfirmationPage(props: any) {
+  const booking = await getBooking(props.params.id);
 
   if (!booking) {
     notFound();
