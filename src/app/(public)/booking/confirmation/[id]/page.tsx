@@ -7,6 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency, formatDate } from '@/lib/utils';
 
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
 async function getBooking(id: string) {
   try {
     const booking = await prisma.booking.findUnique({
@@ -22,11 +28,7 @@ async function getBooking(id: string) {
   }
 }
 
-export default async function BookingConfirmationPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function BookingConfirmationPage({ params }: PageProps) {
   const booking = await getBooking(params.id);
 
   if (!booking) {
@@ -152,5 +154,3 @@ export default async function BookingConfirmationPage({
     </div>
   );
 }
-
-

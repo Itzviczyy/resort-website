@@ -5,3 +5,4 @@ export default async function HomePage() {
   const featuredRooms = await getFeaturedRooms();
   return <HomePageClient featuredRooms={featuredRooms} />;
 }
+
